@@ -1,0 +1,6 @@
+vendor
+.env
+.htaccess
+composer.lock
+accesstoken.txt
+.idea
