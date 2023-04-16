@@ -5,11 +5,10 @@ namespace App\Utils\Routing\Middleware;
 class Middleware
 {
     private static $registeredMiddleware = [
-        'testing' => '\App\Utils\Routing\Middleware\testing'
+        'testing' => \App\Utils\Routing\Middleware\Testing::class
     ];
 
     private static $globalMiddleware = [    // these middlewares will be applied to every single request
-        'testing'
     ];
 
     public static function getGlobalMiddleware() : array

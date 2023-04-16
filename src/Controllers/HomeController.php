@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 class HomeController
 {
-    public static function index()
+    public static function index($id, $itm)
     {
-        echo "oh hello there";
+        echo $id . " " . $itm;
     }
 }

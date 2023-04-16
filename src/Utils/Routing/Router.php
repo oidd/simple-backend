@@ -6,63 +6,32 @@ use App\Utils\Routing\Middleware\Middleware;
 
 class Router
 {
-    private $routes = [];
+    private static array $routes = [];
 
-    const Methods = [
-        'get',
-        'post',
-        'patch',
-        'delete'
-    ];
-
-    public function __construct()
+    public static function add(array $method, string $route, $callback, array $settings = [])
     {
-        foreach (self::Methods as $m)
-            $this->routes[$m] = [];
+        $r = new Route($route, $method, $callback, $settings);
+        if (isset($settings['middleware']))
+            $r->setMiddleware($settings['middleware']);
+        self::$routes[] = $r;
     }
 
-    public function setRoute(string $method, string $route, string $controller, array $middleware = [])
-    {
-        if (!in_array($method, self::Methods))
-            throw new \Exception("Method is not supported");
-
-        foreach ($this->routes[$method] as $r)
-            if ($r['route'] == $route)
-                throw new \Exception("This route already specified");
-
-        $this->routes[$method][] = [
-            'route' => $route,
-            'controller' => $controller,
-            'middleware' => $middleware
-        ];
-    }
-
-    public function start()
+    public static function start()
     {
         $method = strtolower($_SERVER['REQUEST_METHOD']);
         $URI = $_SERVER['REQUEST_URI'];
 
-
-        foreach ($this->routes[$method] as $r)
-        {
-            if ($r['route'] == $URI)
-            {
+        foreach (self::$routes as $r)
+            if ($r->match($URI, $method))
                 $route = $r;
-                break;
-            }
-        }
 
         if (!isset($route))
             throw new \Exception("This route is not specified");
 
         foreach (Middleware::getGlobalMiddleware() as $k)
-            call_user_func([Middleware::getRegisteredMiddleware()[$k], 'run']);
-
-        if (!empty($route['middleware']))
-            foreach ($route['middleware'] as $k)
+            if (in_array($k, Middleware::getRegisteredMiddleware()))
                 call_user_func([Middleware::getRegisteredMiddleware()[$k], 'run']);
 
-
-        call_user_func($route['controller']);
+        $route->proceed($URI);
     }
 }

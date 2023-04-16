@@ -12,6 +12,8 @@
         }
     ],
     "require": {
-        "vlucas/phpdotenv": "^5.5"
+        "vlucas/phpdotenv": "^5.5",
+      "ext-json": "*",
+        "firebase/php-jwt": "^6.4"
     }
 }

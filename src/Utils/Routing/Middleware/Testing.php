@@ -6,5 +6,6 @@ class Testing implements IMiddleware
 {
     public static function run()
     {
+        echo 'hey';
     }
 }
