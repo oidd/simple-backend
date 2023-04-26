@@ -5,7 +5,7 @@ namespace App\Utils\Routing\Middleware;
 class Middleware
 {
     private static $registeredMiddleware = [
-        'testing' => \App\Utils\Routing\Middleware\Testing::class
+        "auth" => [Auth::class]
     ];
 
     private static $globalMiddleware = [    // these middlewares will be applied to every single request

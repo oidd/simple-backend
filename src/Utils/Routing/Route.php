@@ -2,7 +2,6 @@
 
 namespace App\Utils\Routing;
 
-use App\Utils\Constants;
 use App\Utils\Routing\Middleware\Middleware;
 
 class Route
@@ -51,7 +50,7 @@ class Route
     private function proceedMiddleware()
     {
         foreach ($this->middleware as $k)
-            call_user_func([Middleware::getRegisteredMiddleware()[$k], 'run']);
+            call_user_func([Middleware::getRegisteredMiddleware()[$k][0], 'run']);
     }
 
     public function proceed($URI)
@@ -66,7 +65,7 @@ class Route
             $URI .= '/';
 
         return preg_match($this->pathRegex, $URI)
-                and (in_array($method, $this->method) or in_array(Constants::AnyMethod, $this->method));
+                and (in_array($method, $this->method) or in_array(AnyMethod, $this->method));
     }
 
     private function resolveParams($path) : array
